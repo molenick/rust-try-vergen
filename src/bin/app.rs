@@ -1,3 +1,5 @@
+use std::env;
+
 use clap::Parser;
 
 #[derive(Debug, Parser)]
@@ -10,24 +12,21 @@ fn main() {
     let cli = Cli::parse();
     dbg!(&cli.version);
     if cli.version {
-        // let version = std::env::var("CARGO_PKG_VERSION").unwrap_or_else(|_| "Unknown".to_string());
-        // println!("Version: {}", version);
-
-        // let commit_hash =
-        //     std::env::var("VERGEN_GIT_SHA_SHORT").unwrap_or_else(|_| "Unknown".to_string());
-        // println!("Commit Hash: {}", commit_hash);
-
-        // let commit_date =
-        //     std::env::var("VERGEN_GIT_COMMIT_DATE").unwrap_or_else(|_| "Unknown".to_string());
-        // println!("Commit Date: {}", commit_date);
-
-        let built_at =
-            std::env::var("VERGEN_BUILD_TIMESTAMP").unwrap_or_else(|_| "Unknown".to_string());
+        let built_at = env!("VERGEN_BUILD_TIMESTAMP");
         println!("built at: {}", built_at);
 
-        let built_at = std::env::var("VERGEN_SHA").unwrap_or_else(|_| "Unknown".to_string());
-        println!("sha: {}", built_at);
+        println!("Build Timestamp: {}", env!("VERGEN_BUILD_TIMESTAMP"));
+        println!("git describe: {}", env!("VERGEN_GIT_DESCRIBE"));
+        println!("VERGEN_GIT_BRANCH: {}", env!("VERGEN_GIT_BRANCH"));
+        println!("VERGEN_GIT_BRANCH: {}", env!("VERGEN_GIT_BRANCH"));
     }
 
-    println!("I'm the app binary")
+    let prefix = "VERGEN_";
+
+    // Iterate over all environment variables and print only those with the specified prefix
+    for (key, value) in env::vars() {
+        if key.starts_with(prefix) {
+            println!("{}={}", key, value);
+        }
+    }
 }
